@@ -9,9 +9,9 @@ services:
     envVars:
       - key: DATABASE_URL
         fromDatabase:
-          name: meu-postgres
+          name: stock_flow_db_myrs
           property: connectionString
 
 databases:
-  - name: meu-postgres
+  - name: stock_flow_db_myrs
     plan: free
