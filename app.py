@@ -16,5 +16,9 @@ db = SQLAlchemy(app)
 def home():
     return jsonify({"message": "API Flask funcionando!"})
 
+from models import product_model,category_model,supplier_model,user_model,roles_model
+from routes.product_routes import product_bp
+app.register_blueprint(product_bp, url_prefix="/api/products")
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)

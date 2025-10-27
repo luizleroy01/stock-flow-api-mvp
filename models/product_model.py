@@ -25,3 +25,18 @@ class Product(db.Model):
 
     def __repr__(self):
         return f"<Product {self.name} - {self.price}>"
+    
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "description": self.description,
+            "price": float(self.price),
+            "stock": self.stock,
+            "category": self.category.name if self.category else None,
+            "supplier": self.supplier.name if self.supplier else None,
+            "manufacture_date": self.manufacture_date.isoformat() if self.manufacture_date else None,
+            "expiration_date": self.expiration_date.isoformat() if self.expiration_date else None,
+            "created_at": self.created_at.isoformat(),
+            "updated_at": self.updated_at.isoformat()
+        }
