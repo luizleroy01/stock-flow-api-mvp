@@ -52,10 +52,3 @@ def update_product(id_product, data):
 
     db.session.commit()
     return product.to_dict()
-
-
-
-def get_products_by_filter(data):
-    filter= data if data else {"name":'Smartwatch'}
-    result = product_repository.get_products_by_filter(filter)
-    return result
