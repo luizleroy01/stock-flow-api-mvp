@@ -1,6 +1,6 @@
 from models.product_model import Product
 from repositories import product_repository
-from datetime import datetime
+from mappers import mapper_product
 from app import db
 from utils import file_context
 
@@ -12,24 +12,8 @@ def get_product_by_id(id_product):
     return product.to_dict() if product else None
 
 def create_product(data):
-    manufacture_date = None
-    expiration_date = None
 
-    if data.get("manufacture_date"):
-        manufacture_date = datetime.strptime(data["manufacture_date"], "%Y-%m-%d").date()
-    if data.get("expiration_date"):
-        expiration_date = datetime.strptime(data["expiration_date"], "%Y-%m-%d").date()
-
-    new_product = Product(
-        name=data["name"],
-        description=data.get("description"),
-        price=data["price"],
-        stock=data.get("stock", 0),
-        category_id=data["category_id"],
-        supplier_id=data.get("supplier_id"),
-        manufacture_date=manufacture_date,
-        expiration_date=expiration_date
-    )
+    new_product = mapper_product.map_product(Product(),data)
 
     db.session.add(new_product)
     db.session.commit()
@@ -40,16 +24,7 @@ def update_product(id_product, data):
     if not product:
         return None
 
-    if "name" in data: product.name = data["name"]
-    if "description" in data: product.description = data["description"]
-    if "price" in data: product.price = data["price"]
-    if "stock" in data: product.stock = data["stock"]
-    if "category_id" in data: product.category_id = data["category_id"]
-    if "supplier_id" in data: product.supplier_id = data["supplier_id"]
-    if "manufacture_date" in data:
-        product.manufacture_date = datetime.strptime(data["manufacture_date"], "%Y-%m-%d").date()
-    if "expiration_date" in data:
-        product.expiration_date = datetime.strptime(data["expiration_date"], "%Y-%m-%d").date()
+    product = mapper_product(product,data)
 
     db.session.commit()
     return product.to_dict()
@@ -61,4 +36,5 @@ def delete_product(id_product):
 def get_products_from_file(file):
     print(file)
     data = file_context.get_data_from_file(file)
+    
     return data
